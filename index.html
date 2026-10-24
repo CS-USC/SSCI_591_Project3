@@ -47,91 +47,71 @@
               }
             ]
           }]
-        },
+        }
+      });
 
-        renderer: {
-          type: "unique-value",
-          field: "TYPE",
+      await trails.load();
 
-          uniqueValueInfos: [
-            {
-              value: "Primary Road",
-              label: "Primary Road",
-              symbol: {
-                type: "line-3d",
-                symbolLayers: [{
-                  type: "line",
-                  material: { color: "red" },
-                  size: 5
-                }]
-              }
-            },
+      const typeField = trails.fields.find(field => field.name === "TYPE");
 
-            {
-              value: "Secondary Road",
-              label: "Secondary Road",
-              symbol: {
-                type: "line-3d",
-                symbolLayers: [{
-                  type: "line",
-                  material: { color: "orange" },
-                  size: 4
-                }]
-              }
-            },
+      const colors = {
+        "Primary Road": "red",
+        "Secondary Road": "orange",
+        "Minor Road": "yellow",
+        "Social Trail": "purple"
+      };
 
-            {
-              value: "Minor Road",
-              label: "Minor Road",
-              symbol: {
-                type: "line-3d",
-                symbolLayers: [{
-                  type: "line",
-                  material: { color: "yellow" },
-                  size: 3
-                }]
-              }
-            },
+      const sizes = {
+        "Primary Road": 5,
+        "Secondary Road": 4,
+        "Minor Road": 3,
+        "Social Trail": 2
+      };
 
-            {
-              value: "Social Trail",
-              label: "Social Trail",
-              symbol: {
-                type: "line-3d",
-                symbolLayers: [{
-                  type: "line",
-                  material: { color: "purple" },
-                  size: 2
-                }]
-              }
-            }
-          ],
+      trails.renderer = {
+        type: "unique-value",
+        field: "TYPE",
 
-          defaultSymbol: {
+        uniqueValueInfos: typeField.domain.codedValues.map(item => ({
+          value: item.code,
+          label: item.name,
+          symbol: {
             type: "line-3d",
             symbolLayers: [{
               type: "line",
-              material: { color: "gray" },
-              size: 2
+              material: {
+                color: colors[item.name] || "gray"
+              },
+              size: sizes[item.name] || 2
             }]
           }
+        })),
+
+        defaultSymbol: {
+          type: "line-3d",
+          symbolLayers: [{
+            type: "line",
+            material: {
+              color: "gray"
+            },
+            size: 2
+          }]
         }
-      });
+      };
 
       map.add(trails);
 
       const view = new SceneView({
         container: "viewDiv",
-        map: map,
-        camera: {
-          position: {
-            longitude: -118.42,
-            latitude: 33.30,
-            z: 25000
-          },
-          heading: 320,
-          tilt: 65
-        }
+        map: map
+      });
+
+      await view.when();
+
+      await view.goTo({
+        target: trails.fullExtent.expand(1.3),
+        heading: 320,
+        tilt: 65
       });
     </script>
   </head>
