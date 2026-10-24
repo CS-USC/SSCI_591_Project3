@@ -30,29 +30,48 @@
       });
 
       const trails = new FeatureLayer({
-        url: "https://services.arcgis.com/RmCCgQtiZLDCtblq/arcgis/rest/services/Catalina_Roads_Trails/FeatureServer/0"
+        url: "https://services.arcgis.com/RmCCgQtiZLDCtblq/arcgis/rest/services/Catalina_Roads_Trails/FeatureServer/0",
+
+        popupTemplate: {
+          title: "{NAME}",
+          content: [{
+            type: "fields",
+            fieldInfos: [
+              {
+                fieldName: "NAME",
+                label: "Name"
+              },
+              {
+                fieldName: "TYPE",
+                label: "Road Type"
+              }
+            ]
+          }]
+        },
+
+        renderer: {
+          type: "unique-value",
+          field: "TYPE",
+          uniqueValueInfos: [
+            {
+              value: "Primary Road",
+              symbol: {
+                type: "simple-line",
+                color: "red",
+                width: 3
+              }
+            },
+            {
+              value: "Secondary Road",
+              symbol: {
+                type: "simple-line",
+                color: "orange",
+                width: 2
+              }
+            }
+          ]
+        }
       });
-
-      await trails.load();
-
-      const fields = trails.fields.map(field => field.name);
-
-      const nameField = fields.find(field =>
-        field.toLowerCase().includes("name")
-      );
-
-      trails.popupTemplate = {
-        title: nameField ? `{${nameField}}` : "Road or Trail",
-        content: [{
-          type: "fields",
-          fieldInfos: trails.fields
-            .filter(field => field.type !== "oid" && field.type !== "geometry")
-            .map(field => ({
-              fieldName: field.name,
-              label: field.alias
-            }))
-        }]
-      };
 
       map.add(trails);
 
