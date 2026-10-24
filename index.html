@@ -18,10 +18,11 @@
     <script type="module" src="https://js.arcgis.com/5.1/"></script>
 
     <script type="module">
-      const [Map, SceneView, FeatureLayer] = await $arcgis.import([
+      const [Map, SceneView, FeatureLayer, Legend] = await $arcgis.import([
         "@arcgis/core/Map.js",
         "@arcgis/core/views/SceneView.js",
-        "@arcgis/core/layers/FeatureLayer.js"
+        "@arcgis/core/layers/FeatureLayer.js",
+        "@arcgis/core/widgets/Legend.js"
       ]);
 
       const map = new Map({
@@ -31,6 +32,8 @@
 
       const roads = new FeatureLayer({
         url: "https://services.arcgis.com/RmCCgQtiZLDCtblq/arcgis/rest/services/Catalina_Roads_Trails/FeatureServer/0",
+
+        title: "Catalina Roads and Trails",
 
         renderer: {
           type: "simple",
@@ -67,13 +70,19 @@
         camera: {
           position: {
             longitude: -118.42,
-            latitude: 32.8,
+            latitude: 33.10,
             z: 35000
           },
           heading: 0,
           tilt: 60
         },
       });
+
+      const legend = new Legend({
+        view: view
+      });
+
+      view.ui.add(legend, "bottom-right");
     </script>
   </head>
 
