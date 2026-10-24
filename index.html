@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <title>Intro to SceneView - Create a 3D map | Sample | ArcGIS Maps SDK for JavaScript</title>
+    <title>SSCI Project 3: Catalina Island Roads & Trails</title>
     <style>
       html,
       body,
@@ -14,32 +14,37 @@
     </style>
 
     <link rel="stylesheet" href="https://js.arcgis.com/5.1/esri/themes/light/main.css" />
-    <!-- Load the ArcGIS Maps SDK for JavaScript from CDN -->
     <script type="module" src="https://js.arcgis.com/5.1/"></script>
 
     <script type="module">
-      const [Map, SceneView] = await $arcgis.import(["@arcgis/core/Map.js", "@arcgis/core/views/SceneView.js"]);
+      const [Map, SceneView, FeatureLayer] = await $arcgis.import([
+        "@arcgis/core/Map.js",
+        "@arcgis/core/views/SceneView.js",
+        "@arcgis/core/layers/FeatureLayer.js"
+      ]);
 
       const map = new Map({
         basemap: "topo-3d",
         ground: "world-elevation",
       });
 
+      const trails = new FeatureLayer({
+        url: "https://services.arcgis.com/RmCCgQtiZLDCtblq/arcgis/rest/services/Catalina_Roads_Trails/FeatureServer/0"
+      });
+
+      map.add(trails);
+
       const view = new SceneView({
         container: "viewDiv",
         map: map,
         camera: {
           position: {
-            spatialReference: {
-              latestWkid: 3857,
-              wkid: 102100,
-            },
-            x: -11262192.883555487,
-            y: 2315246.351026253,
-            z: 18161244.728082635,
+            longitude: -118.42,
+            latitude: 33.30,
+            z: 25000
           },
-          heading: 0,
-          tilt: 0.49,
+          heading: 320,
+          tilt: 65
         },
       });
     </script>
