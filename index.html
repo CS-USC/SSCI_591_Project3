@@ -4,7 +4,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <title>SSCI Project 3</title>
-
     <style>
       html,
       body,
@@ -15,6 +14,7 @@
     </style>
 
     <link rel="stylesheet" href="https://js.arcgis.com/5.1/esri/themes/light/main.css" />
+    <!-- Load the ArcGIS Maps SDK for JavaScript from CDN -->
     <script type="module" src="https://js.arcgis.com/5.1/"></script>
 
     <script type="module">
@@ -26,93 +26,53 @@
 
       const map = new Map({
         basemap: "topo-3d",
-        ground: "world-elevation"
+        ground: "world-elevation",
       });
 
-      const trails = new FeatureLayer({
+      const roads = new FeatureLayer({
         url: "https://services.arcgis.com/RmCCgQtiZLDCtblq/arcgis/rest/services/Catalina_Roads_Trails/FeatureServer/0",
+
+        renderer: {
+          type: "simple",
+          symbol: {
+            type: "simple-line",
+            color: "red",
+            width: 2
+          }
+        },
 
         popupTemplate: {
           title: "{NAME}",
-          content: [
-            {
-              type: "fields",
-              fieldInfos: [
-                {
-                  fieldName: "NAME",
-                  label: "Name"
-                },
-                {
-                  fieldName: "TYPE",
-                  label: "Type"
-                }
-              ]
-            }
-          ]
-        },
-
-        renderer: {
-          type: "unique-value",
-          field: "TYPE",
-
-          uniqueValueInfos: [
-            {
-              value: "Primary Road",
-              symbol: {
-                type: "simple-line",
-                color: "red",
-                width: 4
+          content: [{
+            type: "fields",
+            fieldInfos: [
+              {
+                fieldName: "NAME",
+                label: "Name"
+              },
+              {
+                fieldName: "TYPE",
+                label: "Type"
               }
-            },
-            {
-              value: "Secondary Road",
-              symbol: {
-                type: "simple-line",
-                color: "orange",
-                width: 3
-              }
-            },
-            {
-              value: "Minor Road",
-              symbol: {
-                type: "simple-line",
-                color: "yellow",
-                width: 2
-              }
-            },
-            {
-              value: "Social Trail",
-              symbol: {
-                type: "simple-line",
-                color: "purple",
-                width: 2
-              }
-            }
-          ],
-
-          defaultSymbol: {
-            type: "simple-line",
-            color: "gray",
-            width: 2
-          }
+            ]
+          }]
         }
       });
 
-      map.add(trails);
+      map.add(roads);
 
       const view = new SceneView({
         container: "viewDiv",
         map: map,
-
         camera: {
           position: {
-            longitude: -118.58,
-            latitude: 33.50,
-            z: 18000
+            longitude: -118.63,
+            latitude: 33.58,
+            z: 30000
           },
           heading: 135,
-          tilt: 68
-        }
+          tilt: 60
+        },
       });
     </script>
   </head>
