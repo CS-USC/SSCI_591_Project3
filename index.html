@@ -34,84 +34,85 @@
 
         popupTemplate: {
           title: "{NAME}",
-          content: [{
-            type: "fields",
-            fieldInfos: [
-              {
-                fieldName: "NAME",
-                label: "Name"
-              },
-              {
-                fieldName: "TYPE",
-                label: "Type"
+          content: [
+            {
+              type: "fields",
+              fieldInfos: [
+                {
+                  fieldName: "NAME",
+                  label: "Name"
+                },
+                {
+                  fieldName: "TYPE",
+                  label: "Type"
+                }
+              ]
+            }
+          ]
+        },
+
+        renderer: {
+          type: "unique-value",
+          field: "TYPE",
+
+          uniqueValueInfos: [
+            {
+              value: "Primary Road",
+              symbol: {
+                type: "simple-line",
+                color: "red",
+                width: 4
               }
-            ]
-          }]
+            },
+            {
+              value: "Secondary Road",
+              symbol: {
+                type: "simple-line",
+                color: "orange",
+                width: 3
+              }
+            },
+            {
+              value: "Minor Road",
+              symbol: {
+                type: "simple-line",
+                color: "yellow",
+                width: 2
+              }
+            },
+            {
+              value: "Social Trail",
+              symbol: {
+                type: "simple-line",
+                color: "purple",
+                width: 2
+              }
+            }
+          ],
+
+          defaultSymbol: {
+            type: "simple-line",
+            color: "gray",
+            width: 2
+          }
         }
       });
-
-      await trails.load();
-
-      const typeField = trails.fields.find(field => field.name === "TYPE");
-
-      const colors = {
-        "Primary Road": "red",
-        "Secondary Road": "orange",
-        "Minor Road": "yellow",
-        "Social Trail": "purple"
-      };
-
-      const sizes = {
-        "Primary Road": 5,
-        "Secondary Road": 4,
-        "Minor Road": 3,
-        "Social Trail": 2
-      };
-
-      trails.renderer = {
-        type: "unique-value",
-        field: "TYPE",
-
-        uniqueValueInfos: typeField.domain.codedValues.map(item => ({
-          value: item.code,
-          label: item.name,
-          symbol: {
-            type: "line-3d",
-            symbolLayers: [{
-              type: "line",
-              material: {
-                color: colors[item.name] || "gray"
-              },
-              size: sizes[item.name] || 2
-            }]
-          }
-        })),
-
-        defaultSymbol: {
-          type: "line-3d",
-          symbolLayers: [{
-            type: "line",
-            material: {
-              color: "gray"
-            },
-            size: 2
-          }]
-        }
-      };
 
       map.add(trails);
 
       const view = new SceneView({
         container: "viewDiv",
-        map: map
-      });
+        map: map,
 
-      await view.when();
-
-      await view.goTo({
-        target: trails.fullExtent.expand(1.3),
-        heading: 320,
-        tilt: 65
+        camera: {
+          position: {
+            longitude: -118.58,
+            latitude: 33.50,
+            z: 18000
+          },
+          heading: 135,
+          tilt: 68
+        }
       });
     </script>
   </head>
