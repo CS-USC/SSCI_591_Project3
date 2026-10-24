@@ -52,21 +52,45 @@
         renderer: {
           type: "unique-value",
           field: "TYPE",
+
+          defaultSymbol: {
+            type: "line-3d",
+            symbolLayers: [{
+              type: "line",
+              material: {
+                color: "gray"
+              },
+              size: 2
+            }]
+          },
+
           uniqueValueInfos: [
             {
               value: "Primary Road",
+              label: "Primary Road",
               symbol: {
-                type: "simple-line",
-                color: "red",
-                width: 3
+                type: "line-3d",
+                symbolLayers: [{
+                  type: "line",
+                  material: {
+                    color: "red"
+                  },
+                  size: 4
+                }]
               }
             },
             {
               value: "Secondary Road",
+              label: "Secondary Road",
               symbol: {
-                type: "simple-line",
-                color: "orange",
-                width: 2
+                type: "line-3d",
+                symbolLayers: [{
+                  type: "line",
+                  material: {
+                    color: "orange"
+                  },
+                  size: 2
+                }]
               }
             }
           ]
