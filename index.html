@@ -3,7 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <title>SSCI Project 3: Catalina Island Roads & Trails</title>
+    <title>SSCI Project 3</title>
+
     <style>
       html,
       body,
@@ -25,12 +26,33 @@
 
       const map = new Map({
         basemap: "topo-3d",
-        ground: "world-elevation",
+        ground: "world-elevation"
       });
 
       const trails = new FeatureLayer({
         url: "https://services.arcgis.com/RmCCgQtiZLDCtblq/arcgis/rest/services/Catalina_Roads_Trails/FeatureServer/0"
       });
+
+      await trails.load();
+
+      const fields = trails.fields.map(field => field.name);
+
+      const nameField = fields.find(field =>
+        field.toLowerCase().includes("name")
+      );
+
+      trails.popupTemplate = {
+        title: nameField ? `{${nameField}}` : "Road or Trail",
+        content: [{
+          type: "fields",
+          fieldInfos: trails.fields
+            .filter(field => field.type !== "oid" && field.type !== "geometry")
+            .map(field => ({
+              fieldName: field.name,
+              label: field.alias
+            }))
+        }]
+      };
 
       map.add(trails);
 
@@ -45,7 +67,7 @@
           },
           heading: 320,
           tilt: 65
-        },
+        }
       });
     </script>
   </head>
