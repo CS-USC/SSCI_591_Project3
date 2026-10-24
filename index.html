@@ -43,7 +43,7 @@
               },
               {
                 fieldName: "TYPE",
-                label: "Road Type"
+                label: "Type"
               }
             ]
           }]
@@ -51,17 +51,7 @@
 
         renderer: {
           type: "unique-value",
-
-          valueExpression: `
-            var t = Upper(Trim($feature.TYPE));
-
-            When(
-              t == "PRIMARY ROAD", "Primary Road",
-              t == "SECONDARY ROAD", "Secondary Road",
-              t == "SOCIAL TRAIL", "Social Trail",
-              "Other"
-            )
-          `,
+          field: "TYPE",
 
           uniqueValueInfos: [
             {
@@ -71,10 +61,8 @@
                 type: "line-3d",
                 symbolLayers: [{
                   type: "line",
-                  material: {
-                    color: "red"
-                  },
-                  size: 4
+                  material: { color: "red" },
+                  size: 5
                 }]
               }
             },
@@ -86,9 +74,20 @@
                 type: "line-3d",
                 symbolLayers: [{
                   type: "line",
-                  material: {
-                    color: "orange"
-                  },
+                  material: { color: "orange" },
+                  size: 4
+                }]
+              }
+            },
+
+            {
+              value: "Minor Road",
+              label: "Minor Road",
+              symbol: {
+                type: "line-3d",
+                symbolLayers: [{
+                  type: "line",
+                  material: { color: "yellow" },
                   size: 3
                 }]
               }
@@ -101,9 +100,7 @@
                 type: "line-3d",
                 symbolLayers: [{
                   type: "line",
-                  material: {
-                    color: "purple"
-                  },
+                  material: { color: "purple" },
                   size: 2
                 }]
               }
@@ -114,9 +111,7 @@
             type: "line-3d",
             symbolLayers: [{
               type: "line",
-              material: {
-                color: "gray"
-              },
+              material: { color: "gray" },
               size: 2
             }]
           }
